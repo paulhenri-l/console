@@ -89,6 +89,8 @@ class NewEngine extends Command
 
             $this->composer('install', $enginePath);
 
+            // Need to rename every service provider and stuff
+
             $this->getOutput()->writeln('');
             $this->info('🎉 Your engine is ready!');
             // Add info for next step
