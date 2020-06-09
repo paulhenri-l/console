@@ -3,9 +3,19 @@
     "description": "The PHL console",
     "type": "project",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "paulhenri-l",
+            "email": "25308170+paulhenri-l@users.noreply.github.com"
+        }
+    ],
     "require": {
         "php": "^7.2.5",
-        "laravel-zero/framework": "^7.0"
+        "ext-json": "*",
+        "ext-zip": "*",
+        "guzzlehttp/guzzle": "^6.5",
+        "laravel-zero/framework": "^7.0",
+        "symfony/process": "^5.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.3.1",
