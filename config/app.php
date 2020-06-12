@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'Phl',
+    'name' => 'PHL',
 
     /*
     |--------------------------------------------------------------------------
@@ -55,6 +55,7 @@ return [
 
     'providers' => [
         App\Providers\AppServiceProvider::class,
+        \App\Providers\CommandsServiceProvider::class,
     ],
 
 ];

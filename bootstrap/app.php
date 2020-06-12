@@ -28,7 +28,7 @@ $app = new LaravelZero\Framework\Application(
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    LaravelZero\Framework\Kernel::class
+    \App\Commands\Kernel::class
 );
 
 $app->singleton(
