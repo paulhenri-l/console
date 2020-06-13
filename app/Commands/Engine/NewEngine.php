@@ -10,6 +10,7 @@ use PHLConsole\Engine\Tasks\Enjoy;
 use PHLConsole\Engine\Tasks\RenameEngine;
 use LaravelZero\Framework\Commands\Command;
 use PaulhenriL\LaravelTaskRunner\CanRunTasks;
+use PHLConsole\Engine\Tasks\TaskException;
 
 class NewEngine extends Command
 {
@@ -27,7 +28,7 @@ class NewEngine extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new engine of the given name the name must be specified in the vendor/package-name format.';
+    protected $description = 'Create a new engine of the given name. The name must be specified in the vendor/package-name format.';
 
     /**
      * The new engine tasks..
@@ -41,19 +42,40 @@ class NewEngine extends Command
      */
     public function handle()
     {
+        $name = $this->argument('name');
+
+        if (!$this->validateName($name)) {
+            $this->error("Your engine name must be in the format 'vendor-name/engine-name'");
+            return 1;
+        }
+
         $this->info('🧙‍ Generating your engine, sit tight...');
         $this->line('');
 
         $engineInfo = new EngineInfo($this->argument('name'), getcwd());
 
-        $this->runTasks([
-            CreateEngineDirectory::class,
-            CloneBaseEngine::class,
-            RenameEngine::class,
-            ComposerInstall::class,
-            Enjoy::class
-        ], $this, $engineInfo);
+        try {
+            $this->runTasks([
+                CreateEngineDirectory::class,
+                CloneBaseEngine::class,
+                RenameEngine::class,
+                ComposerInstall::class,
+                Enjoy::class
+            ], $this, $engineInfo);
+        } catch (TaskException $taskException) {
+            $this->error($taskException->getMessage());
+            $this->line('');
+            return 1;
+        }
 
         $this->line('');
+    }
+
+    /**
+     * Validate that user provided name.
+     */
+    protected function validateName(string $name): bool
+    {
+        return preg_match('/.+\/.+$/', $name);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace PHLConsole\Engine\Tasks;
 
+use PHLConsole\Commands\Engine\NewEngine;
 use PHLConsole\Engine\EngineInfo;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -9,6 +10,13 @@ use Symfony\Component\Finder\SplFileInfo;
 
 class RenameEngine implements TaskInterface
 {
+    /**
+     * The NewEngine command instance.
+     *
+     * @var NewEngine
+     */
+    protected $command;
+
     /**
      * The Filesystem instance.
      *
@@ -29,39 +37,31 @@ class RenameEngine implements TaskInterface
      */
     public function run(Command $command, EngineInfo $engineInfo): void
     {
-        $engineFiles = $this->filesystem->allFiles(
-            $engineInfo->getEnginePath()
-        );
+        $this->command = $command;
 
-        foreach ($engineFiles as $file) {
-            $command->info('Updating ' . $file->getFilename());
-            $this->changeVendorAndPackageName($file, $engineInfo);
-        }
-
+        $this->updateStubs($engineInfo);
         $this->updateComposerJson($engineInfo);
         $this->renameServiceProvider($engineInfo);
     }
 
     /**
-     * Change the stub vendor and package name.
+     * Rename stubs in the engine's files.
      */
-    protected function changeVendorAndPackageName(
-        SplFileInfo $file,
-        EngineInfo $engineInfo
-    ): void {
-        $contents = $file->getContents();
-
-        $contents = str_replace(
-            'Vendor', $engineInfo->getVendorName(), $contents
+    protected function updateStubs(EngineInfo $engineInfo): void
+    {
+        $this->command->info('Updating stubs...');
+        $engineFiles = $this->filesystem->allFiles(
+            $engineInfo->getEnginePath()
         );
 
-        $contents = str_replace(
-            'EngineName', $engineInfo->getEngineName(), $contents
-        );
+        foreach ($engineFiles as $file) {
+            if (!$this->needsUpdating($file)) {
+                continue;
+            }
 
-        $this->filesystem->put(
-            $file->getRealPath(), $contents
-        );
+            $this->changeVendorAndPackageName($file, $engineInfo);
+            $this->command->comment("  {$file->getFilename()} updated");
+        }
     }
 
     /**
@@ -69,6 +69,8 @@ class RenameEngine implements TaskInterface
      */
     protected function updateComposerJson(EngineInfo $engineInfo): void
     {
+        $this->command->info('Updating composer.json');
+
         $contents = $this->filesystem->get(
             $composerJson = $engineInfo->getEnginePath() . '/' . 'composer.json'
         );
@@ -82,8 +84,9 @@ class RenameEngine implements TaskInterface
 
         $this->filesystem->put($composerJson, json_encode(
             $composerJsonData,
-            JSON_FORCE_OBJECT|JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES
+            JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         ));
+        $this->command->comment('  composer.json contents updated.');
     }
 
     /**
@@ -91,11 +94,50 @@ class RenameEngine implements TaskInterface
      */
     protected function renameServiceProvider(EngineInfo $engineInfo): void
     {
-        $this->filesystem->move(
-            $engineInfo->getEnginePath('/src/EngineNameServiceProvider.php'),
-            $engineInfo->getEnginePath(
-                '/src/' . $engineInfo->getEngineName() . 'ServiceProvider.php'
-            )
+        $this->command->info('Renaming ServiceProvider');
+
+        $targetServiceProvider = $engineInfo->getEnginePath(
+            $spPath = 'src/' . $engineInfo->getEngineName() . 'ServiceProvider.php'
         );
+
+        $this->filesystem->move(
+            $engineInfo->getEnginePath('/src/EngineNameStubServiceProvider.php'),
+            $targetServiceProvider
+        );
+
+        $this->command->comment("  Service provider moved to {$spPath}");
+    }
+
+    /**
+     * Change the stub vendor and package name.
+     */
+    protected function changeVendorAndPackageName(
+        SplFileInfo $file,
+        EngineInfo $engineInfo
+    ): void {
+        $contents = $file->getContents();
+
+        $contents = str_replace(
+            'VendorStub', $engineInfo->getVendorName(), $contents
+        );
+
+        $contents = str_replace(
+            'EngineNameStub', $engineInfo->getEngineName(), $contents
+        );
+
+        $this->filesystem->put(
+            $file->getRealPath(), $contents
+        );
+    }
+
+    /**
+     * Does the given file needs to get its content updated?
+     */
+    protected function needsUpdating(SplFileInfo $file): bool
+    {
+        $contents = $file->getContents();
+
+        return str_contains($contents, 'VendorStub')
+            || str_contains($contents, 'EngineNameStub');
     }
 }

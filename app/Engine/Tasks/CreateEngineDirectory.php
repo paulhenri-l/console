@@ -31,12 +31,12 @@ class CreateEngineDirectory implements TaskInterface
         $enginePath = $engineInfo->getEnginePath();
 
         if (is_dir($enginePath) || is_file($enginePath)) {
-            $command->error(
-                "The [{$enginePath}] directory already exists" . PHP_EOL
+            throw new TaskException(
+                "The [{$enginePath}] directory already exists"
             );
-
-            exit(1);
         }
+
+        $command->info("Directory [{$engineInfo->getDirectoryName()}] created");
 
         $this->filesystem->makeDirectory($enginePath);
     }

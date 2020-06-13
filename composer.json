@@ -30,7 +30,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "tests/Functions/getcwd.php"
+        ]
     },
     "config": {
         "preferred-install": "dist",

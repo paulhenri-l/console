@@ -14,6 +14,7 @@ class EngineInfo
      * @var string
      */
     protected $rawEngineName;
+
     /**
      * The string instance.
      *
@@ -28,28 +29,6 @@ class EngineInfo
     {
         $this->rawEngineName = $rawEngineName;
         $this->cwd = $cwd;
-    }
-
-    /**
-     * List all of the engine's files.
-     */
-    protected function listEngineFiles(string $enginePath): array
-    {
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($enginePath)
-        );
-
-        $files = [];
-
-        foreach ($iterator as $file) {
-            if ($file->isDir()) {
-                continue;
-            }
-
-            $files[] = $file->getPathname();
-        }
-
-        return $files;
     }
 
     /**

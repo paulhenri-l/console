@@ -2,23 +2,25 @@
 
 namespace PHLConsole\Engine\Tasks;
 
+use Illuminate\Filesystem\Filesystem;
 use PHLConsole\Engine\EngineInfo;
-use PHLConsole\Services\CommandRunner;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class CloneBaseEngine implements TaskInterface
 {
     /**
-     * The CommandRunner instance.
+     * The Filesystem instance.
      *
-     * @var CommandRunner
+     * @var Filesystem
      */
-    protected $commandRunner;
+    protected $filesystem;
 
-    public function __construct(CommandRunner $commandRunner)
-    {
-
-        $this->commandRunner = $commandRunner;
+    /**
+     * CloneBaseEngine constructor.
+     */
+    public function __construct(Filesystem $filesystem) {
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -26,19 +28,28 @@ class CloneBaseEngine implements TaskInterface
      */
     public function run(Command $command, EngineInfo $engineInfo): void
     {
+        $this->cloneRepo($command, $engineInfo);
+        $this->filesystem->deleteDirectory($engineInfo->getEnginePath('.git'));
+        $this->filesystem->delete($engineInfo->getEnginePath('LICENSE'));
+    }
+
+    /**
+     * Clone the base repo.
+     */
+    protected function cloneRepo(Command $command, EngineInfo $engineInfo)
+    {
         $repo = 'https://github.com/paulhenri-l/laravel-engine.git';
-        $enginePath = $engineInfo->getEnginePath();
 
-        $output = function ($line) use ($command) {
-            $command->getOutput()->writeln($line);
-        };
-
-        $this->commandRunner->run(
-            "git clone {$repo} {$enginePath}", getcwd(), $output
+        $process = Process::fromShellCommandline(
+            "git clone {$repo} {$engineInfo->getEnginePath()}", null, null, null
         );
 
-        $this->commandRunner->run(
-            "rm -rf {$enginePath}/.git", getcwd(), $output
-        );
+        if (getenv('DISABLE_TTY') !== '1') {
+            $process->setTty(Process::isTtySupported());
+        }
+
+        $process->run(function ($type, $line) use ($command) {
+            $command->getOutput()->write($line);
+        });
     }
 }
