@@ -9,12 +9,13 @@ on:
 jobs:
   test:
     name: PHP ${{ matrix.php-versions }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
         php-versions: ['7.2', '7.3', '7.4']
+        os: ['ubuntu-latest', 'windows-latest']
 
     steps:
       - name: Checkout

@@ -18,6 +18,7 @@ class NewEngineTest extends TestCase
         $this->assertFileExists($enginePath . '/src/TestEngineServiceProvider.php');
         $this->assertFileNotExists($enginePath . '/LICENSE');
         $this->assertFileContains('phl/test-engine', $enginePath . '/composer.json');
+        $this->assertFileContains('TestEngine', $enginePath . '/README.md');
         $this->assertFileContains('namespace Phl\\TestEngine', $enginePath . '/src/TestEngineServiceProvider.php');
         $this->assertDirectoryExists($enginePath . '/vendor');
     }

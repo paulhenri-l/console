@@ -40,6 +40,7 @@ class RenameEngine implements TaskInterface
         $this->command = $command;
 
         $this->updateStubs($engineInfo);
+        $this->createReadme($engineInfo);
         $this->updateComposerJson($engineInfo);
         $this->renameServiceProvider($engineInfo);
     }
@@ -62,6 +63,24 @@ class RenameEngine implements TaskInterface
             $this->changeVendorAndPackageName($file, $engineInfo);
             $this->command->comment("  {$file->getFilename()} updated");
         }
+    }
+
+    /**
+     * Create the engine's README.
+     */
+    protected function createReadme(EngineInfo $engineInfo)
+    {
+        $this->command->info('Creating README.md');
+
+        $readmePath = $engineInfo->getEnginePath('README.md');
+
+        $this->filesystem->delete($readmePath);
+
+        $this->filesystem->put(
+            $readmePath, "# {$engineInfo->getEngineName()}" . PHP_EOL
+        );
+
+        $this->command->comment('  README.md created');
     }
 
     /**
