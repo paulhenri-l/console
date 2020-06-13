@@ -1,12 +1,20 @@
 <?php
 
-namespace App\Commands\Engine;
+namespace PHLConsole\Commands\Engine;
 
-use App\Engine\Initiator;
+use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Tasks\CloneBaseEngine;
+use PHLConsole\Engine\Tasks\ComposerInstall;
+use PHLConsole\Engine\Tasks\CreateEngineDirectory;
+use PHLConsole\Engine\Tasks\Enjoy;
+use PHLConsole\Engine\Tasks\RenameEngine;
 use LaravelZero\Framework\Commands\Command;
+use PaulhenriL\LaravelTaskRunner\CanRunTasks;
 
 class NewEngine extends Command
 {
+    use CanRunTasks;
+
     /**
      * The signature of the command.
      *
@@ -22,41 +30,30 @@ class NewEngine extends Command
     protected $description = 'Create a new engine of the given name the name must be specified in the vendor/package-name format.';
 
     /**
-     * The Initiator instance.
+     * The new engine tasks..
      *
-     * @var Initiator
+     * @var array
      */
-    protected $initiator;
-
-    /**
-     * NewEngine constructor.
-     */
-    public function __construct(Initiator $initiator)
-    {
-        parent::__construct();
-
-        $this->initiator = $initiator;
-    }
+    protected $tasks;
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('🚀 Generating new Engine, sit tight.');
+        $this->info('🧙‍ Generating your engine, sit tight...');
+        $this->line('');
 
-        $this->initiator->createNewEngine(
-            $this->getEngineName(), getcwd()
-        );
+        $engineInfo = new EngineInfo($this->argument('name'), getcwd());
 
-        $this->info('🎉 Your engine is ready!');
-    }
+        $this->runTasks([
+            CreateEngineDirectory::class,
+            CloneBaseEngine::class,
+            RenameEngine::class,
+            ComposerInstall::class,
+            Enjoy::class
+        ], $this, $engineInfo);
 
-    /**
-     * Validate and return the engine name.
-     */
-    protected function getEngineName()
-    {
-        return $this->argument('name');
+        $this->line('');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace PHLConsole\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

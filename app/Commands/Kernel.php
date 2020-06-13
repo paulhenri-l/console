@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace PHLConsole\Commands;
 
 class Kernel extends \LaravelZero\Framework\Kernel
 {

@@ -54,8 +54,8 @@ return [
     */
 
     'providers' => [
-        App\Providers\AppServiceProvider::class,
-        \App\Providers\CommandsServiceProvider::class,
+        PHLConsole\Providers\AppServiceProvider::class,
+        \PHLConsole\Providers\CommandsServiceProvider::class,
     ],
 
 ];
