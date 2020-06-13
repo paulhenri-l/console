@@ -15,7 +15,8 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['7.2', '7.3', '7.4']
-        os: ['ubuntu-latest', 'windows-latest']
+        os: ['ubuntu-latest']
+        # os: ['ubuntu-latest', 'windows-latest']
 
     steps:
       - name: Checkout
@@ -35,8 +36,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ runner.php-versions }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
+            ${{ runner.os }}-composer-${{ runner.php-versions }}-
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies

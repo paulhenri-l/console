@@ -17,3 +17,4 @@
 - add command to add livewire
 - add command to add alpinejs
 - add default README template with optional credits
+- add support for windows
