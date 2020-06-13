@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         putenv('DISABLE_TTY=1');
-        fakeCwd(realpath(__DIR__ . '/FakeCwd'));
+        fakeCwd(realpath(__DIR__ . DIRECTORY_SEPARATOR .'FakeCwd'));
 
         parent::setUp();
     }

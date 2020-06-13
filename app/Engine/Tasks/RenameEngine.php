@@ -120,7 +120,7 @@ class RenameEngine implements TaskInterface
         );
 
         $this->filesystem->move(
-            $engineInfo->getEnginePath('src' . DIRECTORY_SEPARATOR . 'EngineNameStubServiceProvider.php'),
+            $engineInfo->getEnginePath('src/EngineNameStubServiceProvider.php'),
             $targetServiceProvider
         );
 
