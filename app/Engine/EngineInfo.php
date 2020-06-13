@@ -60,9 +60,9 @@ class EngineInfo
      */
     public function getEnginePath(string $extra = null): string
     {
-        $enginePath = Str::finish($this->cwd, '/');
+        $enginePath = Str::finish($this->cwd, DIRECTORY_SEPARATOR);
         $enginePath .= $this->getDirectoryName();
-        $enginePath .= $extra ? Str::start($extra, '/') : '';
+        $enginePath .= $extra ? Str::start($extra, DIRECTORY_SEPARATOR) : '';
 
         return $enginePath;
     }

@@ -91,7 +91,7 @@ class RenameEngine implements TaskInterface
         $this->command->info('Updating composer.json');
 
         $contents = $this->filesystem->get(
-            $composerJson = $engineInfo->getEnginePath() . '/' . 'composer.json'
+            $composerJson = $engineInfo->getEnginePath('composer.json')
         );
 
         $composerJsonData = json_decode($contents, true);
@@ -116,11 +116,11 @@ class RenameEngine implements TaskInterface
         $this->command->info('Renaming ServiceProvider');
 
         $targetServiceProvider = $engineInfo->getEnginePath(
-            $spPath = 'src/' . $engineInfo->getEngineName() . 'ServiceProvider.php'
+            $spPath = 'src' . DIRECTORY_SEPARATOR . $engineInfo->getEngineName() . 'ServiceProvider.php'
         );
 
         $this->filesystem->move(
-            $engineInfo->getEnginePath('/src/EngineNameStubServiceProvider.php'),
+            $engineInfo->getEnginePath('src' . DIRECTORY_SEPARATOR . 'EngineNameStubServiceProvider.php'),
             $targetServiceProvider
         );
 
