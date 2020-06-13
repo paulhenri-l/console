@@ -30,7 +30,7 @@ class CreateEngineDirectory implements TaskInterface
     {
         $enginePath = $engineInfo->getEnginePath();
 
-        if (is_dir($enginePath) || is_file($enginePath)) {
+        if ($this->filesystem->exists($enginePath)) {
             throw new TaskException(
                 "The [{$enginePath}] directory already exists"
             );
