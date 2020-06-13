@@ -1,5 +1,8 @@
 # PHL Console
 
+![Tests](https://github.com/paulhenri-l/console/workflows/Tests/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 ## Todo
 
 - specify where to create the engine (including current directory)
