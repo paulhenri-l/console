@@ -21,6 +21,8 @@ class NewEngineTest extends TestCase
         $this->assertFileContains('phl/test-engine', $engineInfo->getEnginePath('composer.json'));
         $this->assertFileContains('TestEngine', $engineInfo->getEnginePath('README.md'));
         $this->assertFileContains('namespace Phl\\TestEngine', $engineInfo->getEnginePath('src/TestEngineServiceProvider.php'));
+        $this->assertFileContains('test_engine_tests', $engineInfo->getEnginePath('phpunit.xml'));
+        $this->assertFileContains('test_engine_tests', $engineInfo->getEnginePath('.github/workflows/tests.yml'));
         $this->assertDirectoryExists($engineInfo->getEnginePath('vendor'));
     }
 

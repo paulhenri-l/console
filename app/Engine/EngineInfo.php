@@ -56,6 +56,14 @@ class EngineInfo
     }
 
     /**
+     * Return the engine's test database name.
+     */
+    public function getEngineTestDatabaseName(): string
+    {
+        return Str::snake($this->getEngineName()) . '_tests';
+    }
+
+    /**
      * Return the engine's path.
      */
     public function getEnginePath(string $extra = null): string

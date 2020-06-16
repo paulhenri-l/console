@@ -55,6 +55,10 @@ class RenameEngine implements TaskInterface
             $engineInfo->getEnginePath()
         );
 
+        $engineFiles = array_merge($this->filesystem->allFiles(
+            $engineInfo->getEnginePath('.github')
+        ), $engineFiles);
+
         foreach ($engineFiles as $file) {
             if (!$this->needsUpdating($file)) {
                 continue;
@@ -144,6 +148,12 @@ class RenameEngine implements TaskInterface
             'EngineNameStub', $engineInfo->getEngineName(), $contents
         );
 
+        $contents = str_replace(
+            'engine_name_stub_tests',
+            $engineInfo->getEngineTestDatabaseName(),
+            $contents
+        );
+
         $this->filesystem->put(
             $file->getRealPath(), $contents
         );
@@ -157,6 +167,7 @@ class RenameEngine implements TaskInterface
         $contents = $file->getContents();
 
         return str_contains($contents, 'VendorStub')
-            || str_contains($contents, 'EngineNameStub');
+            || str_contains($contents, 'EngineNameStub')
+            || str_contains($contents, 'engine_name_stub_tests');
     }
 }
