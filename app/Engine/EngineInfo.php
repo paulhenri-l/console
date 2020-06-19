@@ -3,8 +3,6 @@
 namespace PHLConsole\Engine;
 
 use Illuminate\Support\Str;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 class EngineInfo
 {
@@ -20,15 +18,15 @@ class EngineInfo
      *
      * @var string
      */
-    protected $cwd;
+    protected $engineDirectory;
 
     /**
      * EngineInfo constructor.
      */
-    public function __construct(string $rawEngineName, string $cwd)
+    public function __construct(string $rawEngineName, string $engineDirectory)
     {
         $this->rawEngineName = $rawEngineName;
-        $this->cwd = $cwd;
+        $this->engineDirectory = $engineDirectory;
     }
 
     /**
@@ -56,6 +54,18 @@ class EngineInfo
     }
 
     /**
+     * Return the engine namespace.
+     */
+    public function getEngineNamespace(string $extra = null): string
+    {
+        $extra = $extra
+            ? Str::start($extra, '\\')
+            : '';
+
+        return "{$this->getVendorName()}\\{$this->getEngineName()}" . $extra;
+    }
+
+    /**
      * Return the engine's test database name.
      */
     public function getEngineTestDatabaseName(): string
@@ -68,17 +78,13 @@ class EngineInfo
      */
     public function getEnginePath(string $extra = null): string
     {
-        $enginePath = Str::finish($this->cwd, DIRECTORY_SEPARATOR);
-        $enginePath .= $this->getDirectoryName();
+        $extra = $extra
+            ? Str::start($extra, DIRECTORY_SEPARATOR)
+            : '';
 
-        if ($extra) {
-            $enginePath .= Str::start(
-                str_replace('/', DIRECTORY_SEPARATOR, $extra),
-                DIRECTORY_SEPARATOR
-            );
-        }
+        $extra = str_replace('/', DIRECTORY_SEPARATOR, $extra);
 
-        return $enginePath;
+        return $this->engineDirectory . $extra;
     }
 
     /**

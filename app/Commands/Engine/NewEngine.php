@@ -2,9 +2,11 @@
 
 namespace PHLConsole\Commands\Engine;
 
+use Illuminate\Support\Str;
 use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\EngineInfoFactory;
 use PHLConsole\Engine\Tasks\CloneBaseEngine;
-use PHLConsole\Engine\Tasks\ComposerInstall;
+use PHLConsole\Engine\Tasks\ComposerUpdate;
 use PHLConsole\Engine\Tasks\CreateEngineDirectory;
 use PHLConsole\Engine\Tasks\Enjoy;
 use PHLConsole\Engine\Tasks\RenameEngine;
@@ -35,16 +37,22 @@ class NewEngine extends Command
      *
      * @var array
      */
-    protected $tasks;
+    protected $tasks = [
+        CreateEngineDirectory::class,
+        CloneBaseEngine::class,
+        RenameEngine::class,
+        ComposerUpdate::class,
+        Enjoy::class
+    ];
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $name = $this->argument('name');
+        $rawName = $this->argument('name');
 
-        if (!$this->validateName($name)) {
+        if (!$this->validateName($rawName)) {
             $this->error("Your engine name must be in the format 'vendor-name/engine-name'");
             return 1;
         }
@@ -52,16 +60,13 @@ class NewEngine extends Command
         $this->info('🧙‍ Generating your engine, sit tight...');
         $this->line('');
 
-        $engineInfo = new EngineInfo($this->argument('name'), getcwd());
 
         try {
-            $this->runTasks([
-                CreateEngineDirectory::class,
-                CloneBaseEngine::class,
-                RenameEngine::class,
-                ComposerInstall::class,
-                Enjoy::class
-            ], $this, $engineInfo);
+            $this->runTasks(
+                $this->tasks,
+                $this,
+                $this->makeNewEngineInfo($rawName)
+            );
         } catch (TaskException $taskException) {
             $this->error($taskException->getMessage());
             $this->line('');
@@ -77,5 +82,18 @@ class NewEngine extends Command
     protected function validateName(string $name): bool
     {
         return preg_match('/.+\/.+$/', $name);
+    }
+
+    /**
+     * Make a new EngineInfo instance for the engine that we want to create.
+     */
+    protected function makeNewEngineInfo(string $rawEngineName): EngineInfo
+    {
+        $engineName = explode('/', $rawEngineName)[1];
+
+        return new EngineInfo(
+            $rawEngineName,
+            getcwd() . Str::start($engineName, '/')
+        );
     }
 }

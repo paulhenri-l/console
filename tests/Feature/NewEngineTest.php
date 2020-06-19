@@ -10,7 +10,7 @@ class NewEngineTest extends TestCase
 {
     public function test_that_new_engines_can_be_generated()
     {
-        $engineInfo = new EngineInfo('phl/test-engine', \Tests\getcwd());
+        $engineInfo = new EngineInfo('phl/test-engine', \Tests\getcwd() . '/test-engine');
 
         $this->artisan(
             'new:engine', ['name' => 'phl/test-engine']

@@ -6,7 +6,7 @@ use PHLConsole\Engine\EngineInfo;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class ComposerInstall implements TaskInterface
+class ComposerUpdate implements TaskInterface
 {
     /**
      * Install composer dependencies in the engine.
@@ -14,7 +14,7 @@ class ComposerInstall implements TaskInterface
     public function run(Command $command, EngineInfo $engineInfo): void
     {
         $process = Process::fromShellCommandline(
-            "composer install", $engineInfo->getEnginePath(), null, null, null
+            "composer update", $engineInfo->getEnginePath(), null, null, null
         );
 
         if (getenv('DISABLE_TTY') !== '1') {
