@@ -68,7 +68,8 @@ class ControllerSpec implements GeneratorSpecification
     {
         return [
             [$this, 'removeUnnecessaryUse'],
-            new SortUsesProcessor()
+            new SortUsesProcessor(),
+            // Remove base controller if not present
         ];
     }
 
