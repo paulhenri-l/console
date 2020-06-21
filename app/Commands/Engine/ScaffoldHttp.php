@@ -39,7 +39,8 @@ class ScaffoldHttp extends Command
     /**
      * ScaffoldHttp constructor.
      */
-    public function __construct(Generator $generator) {
+    public function __construct(Generator $generator)
+    {
         parent::__construct();
         $this->generator = $generator;
     }

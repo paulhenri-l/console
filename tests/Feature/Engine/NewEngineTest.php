@@ -8,6 +8,15 @@ use Tests\TestCase;
 
 class NewEngineTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        (new Filesystem)->deleteDirectory(
+            \Tests\getcwd() . '/test-engine'
+        );
+    }
+
     public function test_that_new_engines_can_be_generated()
     {
         $engine = new Engine('phl/test-engine', \Tests\getcwd() . '/test-engine');
@@ -36,7 +45,7 @@ class NewEngineTest extends TestCase
     public function test_engine_cannot_be_created_on_existing_directory()
     {
         (new Filesystem)->makeDirectory(
-            \Tests\getcwd() . DIRECTORY_SEPARATOR . 'test-engine'
+            \Tests\getcwd() . '/test-engine'
         );
 
         $this->artisan(
@@ -54,7 +63,7 @@ class NewEngineTest extends TestCase
     protected function tearDown(): void
     {
         (new Filesystem)->deleteDirectory(
-            \Tests\getcwd() . DIRECTORY_SEPARATOR . 'test-engine'
+            \Tests\getcwd() . '/test-engine'
         );
 
         parent::tearDown();

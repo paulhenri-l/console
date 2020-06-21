@@ -128,7 +128,7 @@ class RenameEngine
         $this->command->info('Renaming ServiceProvider');
 
         $targetServiceProvider = $this->engine->getEnginePath(
-            $spPath = 'src' . DIRECTORY_SEPARATOR . $this->engine->getEngineName() . 'ServiceProvider.php'
+            $spPath = 'src/' . $this->engine->getEngineName() . 'ServiceProvider.php'
         );
 
         $this->filesystem->move(

@@ -55,9 +55,6 @@ class MakeController extends Command
      */
     public function handle()
     {
-        // Check if http scaffolded and output info if not
-        // Auto add routes
-
         $name = $this->argument('name');
         $engine = $this->engineFactory->buildFromCwd();
 
@@ -78,5 +75,7 @@ class MakeController extends Command
         $this->generator->generate($controllerSpec);
 
         $this->info('Controller generated.');
+
+        return 0;
     }
 }

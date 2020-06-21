@@ -91,10 +91,8 @@ class Engine
     public function getEnginePath(string $extra = null): string
     {
         $extra = $extra
-            ? Str::start($extra, DIRECTORY_SEPARATOR)
+            ? Str::start($extra, '/')
             : '';
-
-        $extra = str_replace('/', DIRECTORY_SEPARATOR, $extra);
 
         return $this->engineDirectory . $extra;
     }
@@ -116,7 +114,6 @@ class Engine
     {
         return explode('/', $this->rawEngineName)[1];
     }
-
 
     /**
      * Add the load api routes call to the service provider.

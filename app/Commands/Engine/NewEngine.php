@@ -53,7 +53,6 @@ class NewEngine extends Command
             new CloneBaseEngine($engine),
             new RenameEngine($engine),
             new ComposerUpdate($engine),
-            // Ask if they want scaffold
             new Enjoy(),
         ]);
 
@@ -62,6 +61,8 @@ class NewEngine extends Command
         }
 
         $this->line('');
+
+        return 0;
     }
 
     /**

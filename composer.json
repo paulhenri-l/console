@@ -16,7 +16,7 @@
         "guzzlehttp/guzzle": "^6.5",
         "laravel-zero/framework": "^7.0",
         "paulhenri-l/generator": "^1.0",
-        "paulhenri-l/laravel-task-runner": "^2.0",
+        "paulhenri-l/laravel-task-runner": "^2.1",
         "symfony/process": "^5.1"
     },
     "require-dev": {

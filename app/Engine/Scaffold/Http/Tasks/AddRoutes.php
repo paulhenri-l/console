@@ -39,7 +39,6 @@ class AddRoutes
      */
     public function __invoke(Command $command)
     {
-        // Check if files already exists
         $webRoutes = new WebRoutes(
             $this->engine
         );

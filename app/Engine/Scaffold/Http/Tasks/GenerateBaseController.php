@@ -38,7 +38,6 @@ class GenerateBaseController
      */
     public function __invoke(Command $command)
     {
-        // Check if it does already exists
         $baseController = new BaseController(
             $this->engine
         );
