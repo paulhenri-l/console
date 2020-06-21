@@ -35,7 +35,7 @@ class EditServiceProvider
     /**
      * Run the task.
      */
-    public function run(Command $command)
+    public function __invoke(Command $command)
     {
         $this->engine->addLoadApiRoutes();
         $this->engine->addLoadWebRoutes();

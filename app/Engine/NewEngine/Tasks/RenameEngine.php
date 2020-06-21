@@ -8,8 +8,15 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
 
-class RenameEngine implements TaskInterface
+class RenameEngine
 {
+    /**
+     * The Engine instance.
+     *
+     * @var Engine
+     */
+    protected $engine;
+
     /**
      * The NewEngine command instance.
      *
@@ -27,44 +34,45 @@ class RenameEngine implements TaskInterface
     /**
      * RenameEngine constructor.
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Engine $engine, Filesystem $filesystem = null)
     {
-        $this->filesystem = $filesystem;
+        $this->engine = $engine;
+        $this->filesystem = $filesystem ?? new Filesystem();
     }
 
     /**
      * Rename the base engine's stubs.
      */
-    public function run(Command $command, Engine $engine): void
+    public function __invoke(Command $command)
     {
         $this->command = $command;
 
-        $this->updateStubs($engine);
-        $this->createReadme($engine);
-        $this->updateComposerJson($engine);
-        $this->renameServiceProvider($engine);
+        $this->updateStubs();
+        $this->createReadme();
+        $this->updateComposerJson();
+        $this->renameServiceProvider();
     }
 
     /**
      * Rename stubs in the engine's files.
      */
-    protected function updateStubs(Engine $engine): void
+    protected function updateStubs(): void
     {
         $this->command->info('Updating stubs...');
-        $engineFiles = $this->filesystem->allFiles(
-            $engine->getEnginePath()
+        $this->engineFiles = $this->filesystem->allFiles(
+            $this->engine->getEnginePath()
         );
 
-        $engineFiles = array_merge($this->filesystem->allFiles(
-            $engine->getEnginePath('.github')
-        ), $engineFiles);
+        $this->engineFiles = array_merge($this->filesystem->allFiles(
+            $this->engine->getEnginePath('.github')
+        ), $this->engineFiles);
 
-        foreach ($engineFiles as $file) {
+        foreach ($this->engineFiles as $file) {
             if (!$this->needsUpdating($file)) {
                 continue;
             }
 
-            $this->changeVendorAndPackageName($file, $engine);
+            $this->changeVendorAndPackageName($file, $this->engine);
             $this->command->comment("  {$file->getFilename()} updated");
         }
     }
@@ -72,16 +80,16 @@ class RenameEngine implements TaskInterface
     /**
      * Create the engine's README.
      */
-    protected function createReadme(Engine $engine)
+    protected function createReadme()
     {
         $this->command->info('Creating README.md');
 
-        $readmePath = $engine->getEnginePath('README.md');
+        $readmePath = $this->engine->getEnginePath('README.md');
 
         $this->filesystem->delete($readmePath);
 
         $this->filesystem->put(
-            $readmePath, "# {$engine->getEngineName()}" . PHP_EOL
+            $readmePath, "# {$this->engine->getEngineName()}" . PHP_EOL
         );
 
         $this->command->comment('  README.md created');
@@ -90,17 +98,17 @@ class RenameEngine implements TaskInterface
     /**
      * Change the package name inside the composer.json file
      */
-    protected function updateComposerJson(Engine $engine): void
+    protected function updateComposerJson(): void
     {
         $this->command->info('Updating composer.json');
 
         $contents = $this->filesystem->get(
-            $composerJson = $engine->getEnginePath('composer.json')
+            $composerJson = $this->engine->getEnginePath('composer.json')
         );
 
         $composerJsonData = json_decode($contents, true);
 
-        $composerJsonData['name'] = $engine->getPackageName();
+        $composerJsonData['name'] = $this->engine->getPackageName();
         unset($composerJsonData['authors']);
         $composerJsonData['description'] = 'This is the next great package';
 
@@ -115,16 +123,16 @@ class RenameEngine implements TaskInterface
     /**
      * Rename the engine's ServiceProvider class.
      */
-    protected function renameServiceProvider(Engine $engine): void
+    protected function renameServiceProvider(): void
     {
         $this->command->info('Renaming ServiceProvider');
 
-        $targetServiceProvider = $engine->getEnginePath(
-            $spPath = 'src' . DIRECTORY_SEPARATOR . $engine->getEngineName() . 'ServiceProvider.php'
+        $targetServiceProvider = $this->engine->getEnginePath(
+            $spPath = 'src' . DIRECTORY_SEPARATOR . $this->engine->getEngineName() . 'ServiceProvider.php'
         );
 
         $this->filesystem->move(
-            $engine->getEnginePath('src/EngineNameStubServiceProvider.php'),
+            $this->engine->getEnginePath('src/EngineNameStubServiceProvider.php'),
             $targetServiceProvider
         );
 
@@ -134,23 +142,21 @@ class RenameEngine implements TaskInterface
     /**
      * Change the stub vendor and package name.
      */
-    protected function changeVendorAndPackageName(
-        SplFileInfo $file,
-        Engine $engine
-    ): void {
+    protected function changeVendorAndPackageName(SplFileInfo $file): void
+    {
         $contents = $file->getContents();
 
         $contents = str_replace(
-            'VendorStub', $engine->getVendorName(), $contents
+            'VendorStub', $this->engine->getVendorName(), $contents
         );
 
         $contents = str_replace(
-            'EngineNameStub', $engine->getEngineName(), $contents
+            'EngineNameStub', $this->engine->getEngineName(), $contents
         );
 
         $contents = str_replace(
             'engine_name_stub_tests',
-            $engine->getEngineTestDatabaseName(),
+            $this->engine->getEngineTestDatabaseName(),
             $contents
         );
 

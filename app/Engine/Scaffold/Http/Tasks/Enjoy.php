@@ -9,7 +9,7 @@ class Enjoy
     /**
      * Run the task.
      */
-    public function run(Command $command)
+    public function __invoke(Command $command)
     {
         $command->info('🎉 The http layer is ready!');
     }

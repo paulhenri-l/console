@@ -32,19 +32,6 @@ class NewEngine extends Command
     protected $description = 'Create a new engine of the given name. The name must be specified in the vendor/package-name format.';
 
     /**
-     * The new engine tasks..
-     *
-     * @var array
-     */
-    protected $tasks = [
-        CreateEngineDirectory::class,
-        CloneBaseEngine::class,
-        RenameEngine::class,
-        ComposerUpdate::class,
-        Enjoy::class
-    ];
-
-    /**
      * Execute the console command.
      */
     public function handle()
@@ -59,20 +46,20 @@ class NewEngine extends Command
         $this->info('🧙‍ Generating your engine, sit tight...');
         $this->line('');
 
+        $engine = $this->makeNewEngine($rawName);
 
-        try {
-            $this->runTasks(
-                $this->tasks,
-                $this,
-                $this->makeNewEngine($rawName)
-            );
-        } catch (TaskException $taskException) {
-            $this->error($taskException->getMessage());
-            $this->line('');
+        $finished = $this->runTasks([
+            new CreateEngineDirectory($engine),
+            new CloneBaseEngine($engine),
+            new RenameEngine($engine),
+            new ComposerUpdate($engine),
+            // Ask if they want scaffold
+            new Enjoy(),
+        ]);
+
+        if (!$finished) {
             return 1;
         }
-
-        // Ask if they want to scaffold http etc...
 
         $this->line('');
     }

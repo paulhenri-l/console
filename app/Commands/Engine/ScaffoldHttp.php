@@ -53,12 +53,12 @@ class ScaffoldHttp extends Command
         $this->line('');
 
         $this->runTasks([
-            GenerateBaseController::class,
-            AddRoutes::class,
-            AddViews::class,
-            EditServiceProvider::class,
-            Enjoy::class
-        ], $this);
+            app(GenerateBaseController::class),
+            app(AddRoutes::class),
+            app(AddViews::class),
+            app(EditServiceProvider::class),
+            app(Enjoy::class)
+        ]);
 
         $this->line('');
     }

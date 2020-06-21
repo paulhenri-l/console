@@ -7,8 +7,15 @@ use PHLConsole\Engine\Engine;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class CloneBaseEngine implements TaskInterface
+class CloneBaseEngine
 {
+    /**
+     * The Engine instance.
+     *
+     * @var Engine
+     */
+    protected $engine;
+
     /**
      * The Filesystem instance.
      *
@@ -19,18 +26,20 @@ class CloneBaseEngine implements TaskInterface
     /**
      * CloneBaseEngine constructor.
      */
-    public function __construct(Filesystem $filesystem) {
-        $this->filesystem = $filesystem;
+    public function __construct(Engine $engine, Filesystem $filesystem = null)
+    {
+        $this->engine = $engine;
+        $this->filesystem = $filesystem ?? new Filesystem();
     }
 
     /**
      * Clone the base engine inside the engine directory.
      */
-    public function run(Command $command, Engine $engine): void
+    public function __invoke(Command $command)
     {
-        $this->cloneRepo($command, $engine);
-        $this->filesystem->deleteDirectory($engine->getEnginePath('.git'));
-        $this->filesystem->delete($engine->getEnginePath('LICENSE'));
+        $this->cloneRepo($command, $this->engine);
+        $this->filesystem->deleteDirectory($this->engine->getEnginePath('.git'));
+        $this->filesystem->delete($this->engine->getEnginePath('LICENSE'));
     }
 
     /**

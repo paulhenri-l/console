@@ -6,15 +6,30 @@ use PHLConsole\Engine\Engine;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
-class ComposerUpdate implements TaskInterface
+class ComposerUpdate
 {
+    /**
+     * The Engine instance.
+     *
+     * @var Engine
+     */
+    protected $engine;
+
+    /**
+     * ComposerUpdate constructor.
+     */
+    public function __construct(Engine $engine)
+    {
+        $this->engine = $engine;
+    }
+
     /**
      * Install composer dependencies in the engine.
      */
-    public function run(Command $command, Engine $engine): void
+    public function __invoke(Command $command)
     {
         $process = Process::fromShellCommandline(
-            "composer update", $engine->getEnginePath(), null, null, null
+            "composer update", $this->engine->getEnginePath(), null, null, null
         );
 
         if (getenv('DISABLE_TTY') !== '1') {

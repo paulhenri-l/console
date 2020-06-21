@@ -6,8 +6,15 @@ use PHLConsole\Engine\Engine;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
-class CreateEngineDirectory implements TaskInterface
+class CreateEngineDirectory
 {
+    /**
+     * The Engine instance.
+     *
+     * @var Engine
+     */
+    protected $engine;
+
     /**
      * The Filesystem instance.
      *
@@ -18,25 +25,27 @@ class CreateEngineDirectory implements TaskInterface
     /**
      * CreateEngineDirectory constructor.
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Engine $engine, Filesystem $filesystem = null)
     {
-        $this->filesystem = $filesystem;
+        $this->engine = $engine;
+        $this->filesystem = $filesystem ?? new Filesystem();
     }
 
     /**
      * Create the engine directory.
      */
-    public function run(Command $command, Engine $engine): void
+    public function __invoke(Command $command)
     {
-        $enginePath = $engine->getEnginePath();
+        $enginePath = $this->engine->getEnginePath();
 
         if ($this->filesystem->exists($enginePath)) {
-            throw new TaskException(
-                "The [{$enginePath}] directory already exists"
-            );
+            $command->error("The [{$enginePath}] directory already exists");
+            return false;
         }
 
-        $command->info("Directory [{$engine->getDirectoryName()}] created");
+        $command->info(
+            "Directory [{$this->engine->getDirectoryName()}] created"
+        );
 
         $this->filesystem->makeDirectory($enginePath);
     }
