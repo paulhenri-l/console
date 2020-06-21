@@ -7,7 +7,6 @@ use PaulhenriL\Generator\Generator;
 use PaulhenriL\Generator\GeneratorSpecification;
 use PaulhenriL\Generator\Keywords;
 use PHLConsole\Engine\EngineFactory;
-use PHLConsole\Engine\Make\Generators\Controller;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
