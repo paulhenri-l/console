@@ -2,80 +2,36 @@
 
 namespace PHLConsole\Commands\Engine;
 
-use LaravelZero\Framework\Commands\Command;
-use PHLConsole\Engine\EngineFactory;
+use PaulhenriL\Generator\GeneratorSpecification;
 use PHLConsole\Engine\Make\Generators\Controller;
-use PaulhenriL\Generator\Generator;
-use PaulhenriL\Generator\Keywords;
 
-class MakeController extends Command
+class MakeController extends GeneratorCommand
 {
     /**
-     * The signature of the command.
-     *
-     * @var string
+     * The command signature.
      */
-    protected $signature = 'make:controller {name} {--force}';
-
-    /**
-     * The description of the command.
-     *
-     * @var string
-     */
-    protected $description = 'Generate a new controller';
-
-    /**
-     * The Generator instance.
-     *
-     * @var Generator
-     */
-    protected $generator;
-
-    /**
-     * The EngineFactory instance.
-     *
-     * @var EngineFactory
-     */
-    protected $engineFactory;
-
-    /**
-     * MakeController constructor.
-     */
-    public function __construct(
-        Generator $generator,
-        EngineFactory $engineFactory
-    ) {
-        parent::__construct();
-        $this->generator = $generator;
-        $this->engineFactory = $engineFactory;
+    protected function signature(): string
+    {
+        return 'make:controller';
     }
 
     /**
-     * Execute the console command.
+     * The command description.
      */
-    public function handle()
+    protected function description(): string
     {
-        $name = $this->argument('name');
+        return 'Generate a new controller';
+    }
+
+    /**
+     * The generated file specification.
+     */
+    protected function specification(): GeneratorSpecification
+    {
         $engine = $this->engineFactory->buildFromCwd();
 
-        if (Keywords::isReserved($name)) {
-            $this->error("The name '{$name}' is reserved by PHP.");
-            return 1;
-        }
-
-        $controllerSpec = new Controller(
-            $engine, $this->argument('name')
+        return new Controller(
+            $engine, $this->inputName()
         );
-
-        if (!$this->option('force') && file_exists($controllerSpec->getTargetPath())) {
-            $this->error("The '{$name}' controller already exists use --force to overwrite.");
-            return 1;
-        }
-
-        $this->generator->generate($controllerSpec);
-
-        $this->info('Controller generated.');
-
-        return 0;
     }
 }
