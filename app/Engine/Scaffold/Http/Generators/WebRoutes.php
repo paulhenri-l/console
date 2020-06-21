@@ -2,8 +2,8 @@
 
 namespace PHLConsole\Engine\Scaffold\Http\Generators;
 
+use PaulhenriL\Generator\GeneratorSpecification;
 use PHLConsole\Engine\Engine;
-use PHLConsole\Generator\GeneratorSpecification;
 
 class WebRoutes implements GeneratorSpecification
 {

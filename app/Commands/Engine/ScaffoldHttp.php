@@ -9,7 +9,7 @@ use PHLConsole\Engine\Scaffold\Http\Tasks\AddViews;
 use PHLConsole\Engine\Scaffold\Http\Tasks\EditServiceProvider;
 use PHLConsole\Engine\Scaffold\Http\Tasks\Enjoy;
 use PHLConsole\Engine\Scaffold\Http\Tasks\GenerateBaseController;
-use PHLConsole\Generator\Generator;
+use PaulhenriL\Generator\Generator;
 
 class ScaffoldHttp extends Command
 {

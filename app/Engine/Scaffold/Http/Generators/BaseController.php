@@ -3,7 +3,7 @@
 namespace PHLConsole\Engine\Scaffold\Http\Generators;
 
 use PHLConsole\Engine\Engine;
-use PHLConsole\Generator\GeneratorSpecification;
+use PaulhenriL\Generator\GeneratorSpecification;
 
 class BaseController implements GeneratorSpecification
 {

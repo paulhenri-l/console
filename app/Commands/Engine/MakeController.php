@@ -5,8 +5,8 @@ namespace PHLConsole\Commands\Engine;
 use LaravelZero\Framework\Commands\Command;
 use PHLConsole\Engine\EngineFactory;
 use PHLConsole\Engine\Make\Generators\Controller;
-use PHLConsole\Generator\Generator;
-use PHLConsole\Generator\Keywords;
+use PaulhenriL\Generator\Generator;
+use PaulhenriL\Generator\Keywords;
 
 class MakeController extends Command
 {

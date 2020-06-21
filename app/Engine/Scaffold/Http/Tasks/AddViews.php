@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use PHLConsole\Engine\Engine;
 use PHLConsole\Engine\EngineFactory;
 use PHLConsole\Engine\Scaffold\Http\Generators\WelcomeView;
-use PHLConsole\Generator\Generator;
+use PaulhenriL\Generator\Generator;
 
 class AddViews
 {

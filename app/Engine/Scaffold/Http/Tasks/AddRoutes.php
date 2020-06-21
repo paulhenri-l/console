@@ -7,7 +7,7 @@ use PHLConsole\Engine\Engine;
 use PHLConsole\Engine\EngineFactory;
 use PHLConsole\Engine\Scaffold\Http\Generators\ApiRoutes;
 use PHLConsole\Engine\Scaffold\Http\Generators\WebRoutes;
-use PHLConsole\Generator\Generator;
+use PaulhenriL\Generator\Generator;
 
 class AddRoutes
 {

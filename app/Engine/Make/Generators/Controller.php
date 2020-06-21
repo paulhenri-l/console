@@ -3,8 +3,8 @@
 namespace PHLConsole\Engine\Make\Generators;
 
 use PHLConsole\Engine\Engine;
-use PHLConsole\Generator\GeneratorSpecification;
-use PHLConsole\Generator\SortUsesProcessor;
+use PaulhenriL\Generator\GeneratorSpecification;
+use PaulhenriL\Generator\SortUsesProcessor;
 
 class Controller implements GeneratorSpecification
 {

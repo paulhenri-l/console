@@ -24,7 +24,7 @@ class EngineFactory
     /**
      * Create a new engine instance for the engine we are currently in.
      */
-    public function buildFromCwd()
+    public function buildFromCwd(): Engine
     {
         $composerJson = file_get_contents(getcwd() . '/composer.json');
 

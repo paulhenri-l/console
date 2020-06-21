@@ -5,7 +5,7 @@ namespace PHLConsole\Engine\Scaffold\Http\Tasks;
 use Illuminate\Console\Command;
 use PHLConsole\Engine\Engine;
 use PHLConsole\Engine\EngineFactory;
-use PHLConsole\Generator\Generator;
+use PaulhenriL\Generator\Generator;
 
 class EditServiceProvider
 {
