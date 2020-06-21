@@ -7,6 +7,7 @@ use PaulhenriL\Generator\Generator;
 use PaulhenriL\Generator\GeneratorSpecification;
 use PaulhenriL\Generator\Keywords;
 use PHLConsole\Engine\EngineFactory;
+use PHLConsole\Engine\Make\Generators\Controller;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -55,7 +56,7 @@ abstract class GeneratorCommand extends Command
             return 1;
         }
 
-        $spec = $this->specification();
+        $spec = $this->buildSpecification();
 
         if (!$this->option('force') && file_exists($spec->getTargetPath())) {
             $this->error("The '{$name}' file already exists use --force to overwrite.");
@@ -67,6 +68,20 @@ abstract class GeneratorCommand extends Command
         $this->info($this->generatedType() . ' generated.');
 
         return 0;
+    }
+
+    /**
+     * Build the file specification.
+     */
+    protected function buildSpecification(): GeneratorSpecification
+    {
+        $engine = $this->engineFactory->buildFromCwd();
+
+        $specClass = $this->specification();
+
+        return new $specClass(
+            $engine, $this->inputName()
+        );
     }
 
     /**
@@ -93,8 +108,6 @@ abstract class GeneratorCommand extends Command
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments()
     {
@@ -105,8 +118,6 @@ abstract class GeneratorCommand extends Command
 
     /**
      * Get the console command options.
-     *
-     * @return array
      */
     protected function getOptions()
     {
@@ -126,7 +137,7 @@ abstract class GeneratorCommand extends Command
     abstract protected function description(): string;
 
     /**
-     * The generated file specification.
+     * The file specification classname.
      */
-    abstract protected function specification(): GeneratorSpecification;
+    abstract protected function specification(): string;
 }

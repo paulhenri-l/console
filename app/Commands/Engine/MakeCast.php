@@ -3,16 +3,16 @@
 namespace PHLConsole\Commands\Engine;
 
 use PHLConsole\Commands\GeneratorCommand;
-use PHLConsole\Engine\Make\Generators\Controller;
+use PHLConsole\Engine\Make\Generators\Cast;
 
-class MakeController extends GeneratorCommand
+class MakeCast extends GeneratorCommand
 {
     /**
      * The command signature.
      */
     protected function signature(): string
     {
-        return 'make:controller';
+        return 'make:cast';
     }
 
     /**
@@ -20,7 +20,7 @@ class MakeController extends GeneratorCommand
      */
     protected function description(): string
     {
-        return 'Create a new controller class';
+        return 'Create a new custom Eloquent cast class';
     }
 
     /**
@@ -28,6 +28,6 @@ class MakeController extends GeneratorCommand
      */
     protected function specification(): string
     {
-        return Controller::class;
+        return Cast::class;
     }
 }

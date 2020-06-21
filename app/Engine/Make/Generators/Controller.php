@@ -2,75 +2,39 @@
 
 namespace PHLConsole\Engine\Make\Generators;
 
-use PHLConsole\Engine\Engine;
-use PaulhenriL\Generator\GeneratorSpecification;
-use PaulhenriL\Generator\SortUsesProcessor;
-
-class Controller implements GeneratorSpecification
+class Controller extends EngineClassGenerator
 {
     /**
-     * The EngineInfo instance.
-     *
-     * @var Engine
+     * Return the path to the class template.
      */
-    protected $engine;
-
-    /**
-     * The Controller name.
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * ControllerSpec constructor.
-     */
-    public function __construct(Engine $engine, string $name)
+    protected function getTemplatePath(): string
     {
-        $this->name = str_replace('\\', '/', $name);
-        $this->engine = $engine;
+        return __DIR__ . '/stubs/controller.stub';
     }
 
     /**
-     * The template to use for generation.
+     * Return the namespace for the new class.
      */
-    public function getTemplate(): string
+    function getTargetNamespace(): string
     {
-        return file_get_contents(
-            __DIR__ . '/stubs/controller.stub'
-        );
+        return 'Http\Controllers';
     }
 
     /**
-     * Return the target path for the generated file.
+     * Add extra replacement variables.
      */
-    public function getTargetPath(): string
+    protected function getExtraReplacements(): array
     {
-        return $this->engine->getEnginePath(
-            "src/Http/Controllers/{$this->name}.php"
-        );
+        return [];
     }
 
     /**
-     * Return the replacements
+     * Add extra processors.
      */
-    public function getReplacements(): array
-    {
-        return [
-            'namespace' => $this->getControllerNamespace(),
-            'rootNamespace' => $this->engine->getEngineNamespace(),
-            'class' => $this->getControllerName()
-        ];
-    }
-
-    /**
-     * Return template processors.
-     */
-    public function getProcessors(): array
+    protected function getExtraProcessors(): array
     {
         return [
             [$this, 'removeUnnecessaryUse'],
-            new SortUsesProcessor(),
             [$this, 'removeBaseController']
         ];
     }
@@ -80,7 +44,7 @@ class Controller implements GeneratorSpecification
      */
     public function removeUnnecessaryUse(string $template)
     {
-        $controllerNamespace = $this->getControllerNamespace();
+        $controllerNamespace = $this->getGeneratedClassNamespace();
 
         return str_replace(
             "use {$controllerNamespace}\Controller;\n",
@@ -113,34 +77,5 @@ class Controller implements GeneratorSpecification
         }
 
         return $template;
-    }
-
-    /**
-     * Return the controller name.
-     */
-    protected function getControllerName(): string
-    {
-        $parts = explode('/', $this->name);
-
-        return array_pop($parts);
-    }
-
-    /**
-     * Return the controller's namespace.
-     */
-    protected function getControllerNamespace(): string
-    {
-        $parts = explode('/', $this->name);
-
-        // Remove controller name.
-        array_pop($parts);
-
-        $relativeNamespace = count($parts)
-            ? '\\' . implode('\\', $parts)
-            : '';
-
-        return $this->engine->getEngineNamespace(
-            "Http\Controllers{$relativeNamespace}"
-        );
     }
 }
