@@ -60,7 +60,7 @@ abstract class EngineClassGenerator implements GeneratorSpecification
         return array_merge([
             'namespace' => $this->getGeneratedClassNamespace(),
             'rootNamespace' => $this->engine->getEngineNamespace(),
-            'class' => $this->getClassname()
+            'class' => $this->getClassname(),
         ], $this->getExtraReplacements());
     }
 
