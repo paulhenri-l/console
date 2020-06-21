@@ -26,7 +26,15 @@ namespace PHLConsole\Commands\Engine {
     }
 }
 
-namespace PHLConsole\Engine\Tasks {
+namespace PHLConsole\Engine {
+
+    function getcwd()
+    {
+        return \Tests\fakeCwd();
+    }
+}
+
+namespace PHLConsole\Engine\NewEngine\Tasks {
 
     function getcwd()
     {

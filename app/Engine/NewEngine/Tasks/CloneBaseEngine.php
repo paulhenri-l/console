@@ -1,9 +1,9 @@
 <?php
 
-namespace PHLConsole\Engine\Tasks;
+namespace PHLConsole\Engine\NewEngine\Tasks;
 
 use Illuminate\Filesystem\Filesystem;
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
@@ -26,22 +26,22 @@ class CloneBaseEngine implements TaskInterface
     /**
      * Clone the base engine inside the engine directory.
      */
-    public function run(Command $command, EngineInfo $engineInfo): void
+    public function run(Command $command, Engine $engine): void
     {
-        $this->cloneRepo($command, $engineInfo);
-        $this->filesystem->deleteDirectory($engineInfo->getEnginePath('.git'));
-        $this->filesystem->delete($engineInfo->getEnginePath('LICENSE'));
+        $this->cloneRepo($command, $engine);
+        $this->filesystem->deleteDirectory($engine->getEnginePath('.git'));
+        $this->filesystem->delete($engine->getEnginePath('LICENSE'));
     }
 
     /**
      * Clone the base repo.
      */
-    protected function cloneRepo(Command $command, EngineInfo $engineInfo)
+    protected function cloneRepo(Command $command, Engine $engine)
     {
         $repo = 'https://github.com/paulhenri-l/laravel-engine.git';
 
         $process = Process::fromShellCommandline(
-            "git clone {$repo} {$engineInfo->getEnginePath()}", null, null, null
+            "git clone {$repo} {$engine->getEnginePath()}", null, null, null
         );
 
         if (getenv('DISABLE_TTY') !== '1') {

@@ -1,19 +1,19 @@
 <?php
 
-namespace PHLConsole\Engine\Generator;
+namespace PHLConsole\Engine\Make\Generators;
 
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 use PHLConsole\Generator\GeneratorSpecification;
 use PHLConsole\Generator\SortUsesProcessor;
 
-class ControllerSpec implements GeneratorSpecification
+class Controller implements GeneratorSpecification
 {
     /**
      * The EngineInfo instance.
      *
-     * @var EngineInfo
+     * @var Engine
      */
-    protected $engineInfo;
+    protected $engine;
 
     /**
      * The Controller name.
@@ -25,10 +25,10 @@ class ControllerSpec implements GeneratorSpecification
     /**
      * ControllerSpec constructor.
      */
-    public function __construct(EngineInfo $engineInfo, string $name)
+    public function __construct(Engine $engine, string $name)
     {
         $this->name = str_replace('\\', '/', $name);
-        $this->engineInfo = $engineInfo;
+        $this->engine = $engine;
     }
 
     /**
@@ -36,7 +36,9 @@ class ControllerSpec implements GeneratorSpecification
      */
     public function getTemplate(): string
     {
-        return file_get_contents(__DIR__ . '/stubs/controller.stub');
+        return file_get_contents(
+            __DIR__ . '/stubs/controller.stub'
+        );
     }
 
     /**
@@ -44,7 +46,7 @@ class ControllerSpec implements GeneratorSpecification
      */
     public function getTargetPath(): string
     {
-        return $this->engineInfo->getEnginePath(
+        return $this->engine->getEnginePath(
             "src/Http/Controllers/{$this->name}.php"
         );
     }
@@ -56,7 +58,7 @@ class ControllerSpec implements GeneratorSpecification
     {
         return [
             'namespace' => $this->getControllerNamespace(),
-            'rootNamespace' => $this->engineInfo->getEngineNamespace(),
+            'rootNamespace' => $this->engine->getEngineNamespace(),
             'class' => $this->getControllerName()
         ];
     }
@@ -69,7 +71,7 @@ class ControllerSpec implements GeneratorSpecification
         return [
             [$this, 'removeUnnecessaryUse'],
             new SortUsesProcessor(),
-            // Remove base controller if not present
+            [$this, 'removeBaseController']
         ];
     }
 
@@ -78,15 +80,39 @@ class ControllerSpec implements GeneratorSpecification
      */
     public function removeUnnecessaryUse(string $template)
     {
-        $controllerNamespace = $this->engineInfo->getEngineNamespace(
-            'Http\Controllers'
-        );
+        $controllerNamespace = $this->getControllerNamespace();
 
         return str_replace(
             "use {$controllerNamespace}\Controller;\n",
             '',
             $template
         );
+    }
+
+    /**
+     * Remove the extend statement if base controller does not exists.
+     */
+    public function removeBaseController(string $template)
+    {
+        $baseControllerPath = $this->engine->getEnginePath(
+            'src/Http/Controllers/Controller.php'
+        );
+
+        $baseControllerNamespace = $this->engine->getEngineNamespace(
+            'Http\Controllers\Controller'
+        );
+
+        if (!file_exists($baseControllerPath)) {
+            $template = str_replace(
+                ' extends Controller', '', $template
+            );
+
+            $template = str_replace(
+                "use {$baseControllerNamespace};\n", '', $template
+            );
+        }
+
+        return $template;
     }
 
     /**
@@ -113,7 +139,7 @@ class ControllerSpec implements GeneratorSpecification
             ? '\\' . implode('\\', $parts)
             : '';
 
-        return $this->engineInfo->getEngineNamespace(
+        return $this->engine->getEngineNamespace(
             "Http\Controllers{$relativeNamespace}"
         );
     }

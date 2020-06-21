@@ -1,25 +1,25 @@
 <?php
 
-namespace PHLConsole\Engine\Generator;
+namespace PHLConsole\Engine\Scaffold\Http\Generators;
 
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 use PHLConsole\Generator\GeneratorSpecification;
 
-class BaseControllerSpec implements GeneratorSpecification
+class WebRoutes implements GeneratorSpecification
 {
     /**
      * The EngineInfo instance.
      *
-     * @var EngineInfo
+     * @var Engine
      */
-    protected $engineInfo;
+    protected $engine;
 
     /**
      * ControllerSpec constructor.
      */
-    public function __construct(EngineInfo $engineInfo)
+    public function __construct(Engine $engine)
     {
-        $this->engineInfo = $engineInfo;
+        $this->engine = $engine;
     }
 
     /**
@@ -27,7 +27,7 @@ class BaseControllerSpec implements GeneratorSpecification
      */
     public function getTemplate(): string
     {
-        return file_get_contents(__DIR__ . '/stubs/base_controller.stub');
+        return file_get_contents(__DIR__ . '/stubs/routes/web.stub');
     }
 
     /**
@@ -35,8 +35,8 @@ class BaseControllerSpec implements GeneratorSpecification
      */
     public function getTargetPath(): string
     {
-        return $this->engineInfo->getEnginePath(
-            "src/Http/Controllers/Controller.php"
+        return $this->engine->getEnginePath(
+            "routes/web.php"
         );
     }
 
@@ -46,7 +46,7 @@ class BaseControllerSpec implements GeneratorSpecification
     public function getReplacements(): array
     {
         return [
-            'rootNamespace' => $this->engineInfo->getEngineNamespace(),
+            'engineName' => $this->engine->getEngineName()
         ];
     }
 

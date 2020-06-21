@@ -1,6 +1,6 @@
 <?php
 
-namespace PHLConsole\Engine\Tasks;
+namespace PHLConsole\Engine\NewEngine\Tasks;
 
 class TaskException extends \Exception
 {

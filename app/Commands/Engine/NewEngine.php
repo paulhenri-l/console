@@ -3,16 +3,15 @@
 namespace PHLConsole\Commands\Engine;
 
 use Illuminate\Support\Str;
-use PHLConsole\Engine\EngineInfo;
-use PHLConsole\Engine\EngineInfoFactory;
-use PHLConsole\Engine\Tasks\CloneBaseEngine;
-use PHLConsole\Engine\Tasks\ComposerUpdate;
-use PHLConsole\Engine\Tasks\CreateEngineDirectory;
-use PHLConsole\Engine\Tasks\Enjoy;
-use PHLConsole\Engine\Tasks\RenameEngine;
+use PHLConsole\Engine\Engine;
+use PHLConsole\Engine\NewEngine\Tasks\CloneBaseEngine;
+use PHLConsole\Engine\NewEngine\Tasks\ComposerUpdate;
+use PHLConsole\Engine\NewEngine\Tasks\CreateEngineDirectory;
+use PHLConsole\Engine\NewEngine\Tasks\Enjoy;
+use PHLConsole\Engine\NewEngine\Tasks\RenameEngine;
 use LaravelZero\Framework\Commands\Command;
 use PaulhenriL\LaravelTaskRunner\CanRunTasks;
-use PHLConsole\Engine\Tasks\TaskException;
+use PHLConsole\Engine\NewEngine\Tasks\TaskException;
 
 class NewEngine extends Command
 {
@@ -65,13 +64,15 @@ class NewEngine extends Command
             $this->runTasks(
                 $this->tasks,
                 $this,
-                $this->makeNewEngineInfo($rawName)
+                $this->makeNewEngine($rawName)
             );
         } catch (TaskException $taskException) {
             $this->error($taskException->getMessage());
             $this->line('');
             return 1;
         }
+
+        // Ask if they want to scaffold http etc...
 
         $this->line('');
     }
@@ -87,11 +88,11 @@ class NewEngine extends Command
     /**
      * Make a new EngineInfo instance for the engine that we want to create.
      */
-    protected function makeNewEngineInfo(string $rawEngineName): EngineInfo
+    protected function makeNewEngine(string $rawEngineName): Engine
     {
         $engineName = explode('/', $rawEngineName)[1];
 
-        return new EngineInfo(
+        return new Engine(
             $rawEngineName,
             getcwd() . Str::start($engineName, '/')
         );

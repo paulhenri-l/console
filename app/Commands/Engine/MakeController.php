@@ -3,9 +3,8 @@
 namespace PHLConsole\Commands\Engine;
 
 use LaravelZero\Framework\Commands\Command;
-use PHLConsole\Engine\EngineInfo;
-use PHLConsole\Engine\Generator\BaseControllerSpec;
-use PHLConsole\Engine\Generator\ControllerSpec;
+use PHLConsole\Engine\EngineFactory;
+use PHLConsole\Engine\Make\Generators\Controller;
 use PHLConsole\Generator\Generator;
 use PHLConsole\Generator\Keywords;
 
@@ -33,12 +32,22 @@ class MakeController extends Command
     protected $generator;
 
     /**
+     * The EngineFactory instance.
+     *
+     * @var EngineFactory
+     */
+    protected $engineFactory;
+
+    /**
      * MakeController constructor.
      */
-    public function __construct(Generator $generator)
-    {
+    public function __construct(
+        Generator $generator,
+        EngineFactory $engineFactory
+    ) {
         parent::__construct();
         $this->generator = $generator;
+        $this->engineFactory = $engineFactory;
     }
 
     /**
@@ -46,25 +55,20 @@ class MakeController extends Command
      */
     public function handle()
     {
+        // Check if http scaffolded and output info if not
+        // Auto add routes
+
         $name = $this->argument('name');
-        $engineInfo = $this->makeNewEngineInfo();
+        $engine = $this->engineFactory->buildFromCwd();
 
         if (Keywords::isReserved($name)) {
             $this->error("The name '{$name}' is reserved by PHP.");
             return 0;
         }
 
-        $controllerSpec = new ControllerSpec(
-            $engineInfo, $this->argument('name')
+        $controllerSpec = new Controller(
+            $engine, $this->argument('name')
         );
-
-        $baseController = new BaseControllerSpec(
-            $engineInfo
-        );
-
-        if (!file_exists($baseController->getTargetPath())) {
-            $this->generator->generate($baseController);
-        }
 
         if (!$this->option('force') && file_exists($controllerSpec->getTargetPath())) {
             $this->error("The '{$name}' controller already exists.");
@@ -74,17 +78,5 @@ class MakeController extends Command
         $this->generator->generate($controllerSpec);
 
         $this->info('Controller generated.');
-    }
-
-    /**
-     * Make a new EngineInfo instance for the engine that we want to create.
-     */
-    protected function makeNewEngineInfo(): EngineInfo
-    {
-        $engineName = json_decode(
-            file_get_contents(getcwd() . '/composer.json'), true
-        )['name'];
-
-        return new EngineInfo($engineName, getcwd());
     }
 }

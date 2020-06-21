@@ -1,8 +1,8 @@
 <?php
 
-namespace PHLConsole\Engine\Tasks;
+namespace PHLConsole\Engine\NewEngine\Tasks;
 
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
@@ -26,9 +26,9 @@ class CreateEngineDirectory implements TaskInterface
     /**
      * Create the engine directory.
      */
-    public function run(Command $command, EngineInfo $engineInfo): void
+    public function run(Command $command, Engine $engine): void
     {
-        $enginePath = $engineInfo->getEnginePath();
+        $enginePath = $engine->getEnginePath();
 
         if ($this->filesystem->exists($enginePath)) {
             throw new TaskException(
@@ -36,7 +36,7 @@ class CreateEngineDirectory implements TaskInterface
             );
         }
 
-        $command->info("Directory [{$engineInfo->getDirectoryName()}] created");
+        $command->info("Directory [{$engine->getDirectoryName()}] created");
 
         $this->filesystem->makeDirectory($enginePath);
     }

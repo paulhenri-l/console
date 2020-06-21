@@ -3,27 +3,27 @@
 namespace Tests\Feature;
 
 use Illuminate\Filesystem\Filesystem;
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 use Tests\TestCase;
 
 class NewEngineTest extends TestCase
 {
     public function test_that_new_engines_can_be_generated()
     {
-        $engineInfo = new EngineInfo('phl/test-engine', \Tests\getcwd() . '/test-engine');
+        $engine = new Engine('phl/test-engine', \Tests\getcwd() . '/test-engine');
 
         $this->artisan(
             'new:engine', ['name' => 'phl/test-engine']
         )->assertExitCode(0);
 
-        $this->assertFileExists($engineInfo->getEnginePath('src/TestEngineServiceProvider.php'));
-        $this->assertFileNotExists($engineInfo->getEnginePath('LICENSE'));
-        $this->assertFileContains('phl/test-engine', $engineInfo->getEnginePath('composer.json'));
-        $this->assertFileContains('TestEngine', $engineInfo->getEnginePath('README.md'));
-        $this->assertFileContains('namespace Phl\\TestEngine', $engineInfo->getEnginePath('src/TestEngineServiceProvider.php'));
-        $this->assertFileContains('test_engine_tests', $engineInfo->getEnginePath('phpunit.xml'));
-        $this->assertFileContains('test_engine_tests', $engineInfo->getEnginePath('.github/workflows/tests.yml'));
-        $this->assertDirectoryExists($engineInfo->getEnginePath('vendor'));
+        $this->assertFileExists($engine->getEnginePath('src/TestEngineServiceProvider.php'));
+        $this->assertFileNotExists($engine->getEnginePath('LICENSE'));
+        $this->assertFileContains('phl/test-engine', $engine->getEnginePath('composer.json'));
+        $this->assertFileContains('TestEngine', $engine->getEnginePath('README.md'));
+        $this->assertFileContains('namespace Phl\\TestEngine', $engine->getEnginePath('src/TestEngineServiceProvider.php'));
+        $this->assertFileContains('test_engine_tests', $engine->getEnginePath('phpunit.xml'));
+        $this->assertFileContains('test_engine_tests', $engine->getEnginePath('.github/workflows/tests.yml'));
+        $this->assertDirectoryExists($engine->getEnginePath('vendor'));
     }
 
     public function test_engine_name_format_is_validated()

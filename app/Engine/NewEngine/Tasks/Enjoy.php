@@ -1,16 +1,16 @@
 <?php
 
-namespace PHLConsole\Engine\Tasks;
+namespace PHLConsole\Engine\NewEngine\Tasks;
 
 use Illuminate\Console\Command;
-use PHLConsole\Engine\EngineInfo;
+use PHLConsole\Engine\Engine;
 
 class Enjoy implements TaskInterface
 {
     /**
      * Tell the user how much he'll enjoy is new engine!
      */
-    public function run(Command $command, EngineInfo $engineInfo): void
+    public function run(Command $command, Engine $engine): void
     {
         $command->info('🎉 Your engine is ready!');
     }
