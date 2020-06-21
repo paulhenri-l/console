@@ -3,6 +3,7 @@
 namespace PHLConsole\Commands\Engine;
 
 use PaulhenriL\Generator\GeneratorSpecification;
+use PHLConsole\Commands\GeneratorCommand;
 use PHLConsole\Engine\Make\Generators\Controller;
 
 class MakeController extends GeneratorCommand

@@ -1,6 +1,6 @@
 <?php
 
-namespace PHLConsole\Commands\Engine;
+namespace PHLConsole\Commands;
 
 use LaravelZero\Framework\Commands\Command;
 use PaulhenriL\Generator\Generator;
