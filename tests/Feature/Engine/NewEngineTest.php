@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Engine;
 
 use Illuminate\Filesystem\Filesystem;
 use PHLConsole\Engine\Engine;
@@ -33,7 +33,7 @@ class NewEngineTest extends TestCase
         )->assertExitCode(1);
     }
 
-    public function test_engine_cannot_be_created_on_exisiting_directory()
+    public function test_engine_cannot_be_created_on_existing_directory()
     {
         (new Filesystem)->makeDirectory(
             \Tests\getcwd() . DIRECTORY_SEPARATOR . 'test-engine'

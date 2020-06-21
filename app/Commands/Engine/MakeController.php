@@ -63,7 +63,7 @@ class MakeController extends Command
 
         if (Keywords::isReserved($name)) {
             $this->error("The name '{$name}' is reserved by PHP.");
-            return 0;
+            return 1;
         }
 
         $controllerSpec = new Controller(
@@ -72,7 +72,7 @@ class MakeController extends Command
 
         if (!$this->option('force') && file_exists($controllerSpec->getTargetPath())) {
             $this->error("The '{$name}' controller already exists use --force to overwrite.");
-            return 0;
+            return 1;
         }
 
         $this->generator->generate($controllerSpec);
