@@ -71,7 +71,7 @@ class MakeController extends Command
         );
 
         if (!$this->option('force') && file_exists($controllerSpec->getTargetPath())) {
-            $this->error("The '{$name}' controller already exists.");
+            $this->error("The '{$name}' controller already exists use --force to overwrite.");
             return 0;
         }
 
