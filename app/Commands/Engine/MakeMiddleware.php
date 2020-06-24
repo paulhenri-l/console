@@ -4,15 +4,16 @@ namespace PHLConsole\Commands\Engine;
 
 use PHLConsole\Commands\GeneratorCommand;
 use PHLConsole\Engine\Make\Generators\Mail;
+use PHLConsole\Engine\Make\Generators\Middleware;
 
-class MakeMail extends GeneratorCommand
+class MakeMiddleware extends GeneratorCommand
 {
     /**
      * The command signature.
      */
     protected function signature(): string
     {
-        return 'make:mail';
+        return 'make:middleware';
     }
 
     /**
@@ -20,7 +21,7 @@ class MakeMail extends GeneratorCommand
      */
     protected function description(): string
     {
-        return 'Create a new email class';
+        return 'Create a new middleware class';
     }
 
     /**
@@ -28,6 +29,6 @@ class MakeMail extends GeneratorCommand
      */
     protected function specification(): string
     {
-        return Mail::class;
+        return Middleware::class;
     }
 }

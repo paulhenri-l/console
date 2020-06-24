@@ -24,6 +24,7 @@ class MakeCommandsTest extends TestCase
             ['exception', 'Exceptions'],
             ['job', 'Jobs'],
             ['mail', 'Mails'],
+            ['middleware', 'Http\Middleware'],
         ];
     }
 
