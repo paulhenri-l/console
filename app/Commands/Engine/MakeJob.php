@@ -3,16 +3,16 @@
 namespace PHLConsole\Commands\Engine;
 
 use PHLConsole\Commands\GeneratorCommand;
-use PHLConsole\Engine\Make\Generators\Exception;
+use PHLConsole\Engine\Make\Generators\Job;
 
-class MakeException extends GeneratorCommand
+class MakeJob extends GeneratorCommand
 {
     /**
      * The command signature.
      */
     protected function signature(): string
     {
-        return 'make:exception';
+        return 'make:job';
     }
 
     /**
@@ -20,7 +20,7 @@ class MakeException extends GeneratorCommand
      */
     protected function description(): string
     {
-        return 'Create a new custom exception class';
+        return 'Create a new job class';
     }
 
     /**
@@ -28,6 +28,6 @@ class MakeException extends GeneratorCommand
      */
     protected function specification(): string
     {
-        return Exception::class;
+        return Job::class;
     }
 }

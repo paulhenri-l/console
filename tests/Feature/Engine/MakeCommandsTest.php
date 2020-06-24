@@ -22,6 +22,7 @@ class MakeCommandsTest extends TestCase
             ['command', 'Console\Commands'],
             ['event', 'Events'],
             ['exception', 'Exceptions'],
+            ['job', 'Jobs'],
         ];
     }
 
