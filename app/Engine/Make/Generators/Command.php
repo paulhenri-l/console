@@ -2,6 +2,8 @@
 
 namespace PHLConsole\Engine\Make\Generators;
 
+use Illuminate\Support\Str;
+
 class Command extends EngineClassGenerator
 {
     /**
@@ -25,9 +27,12 @@ class Command extends EngineClassGenerator
      */
     protected function getExtraReplacements(): array
     {
+        $commandName = str_replace('/', ':', $this->name);
+        $commandNamespace = Str::kebab($this->engine->getEngineName());
+
         return [
             'command' => strtolower(
-                str_replace('/', ':', $this->name)
+                "{$commandNamespace}:{$commandName}"
             )
         ];
     }
