@@ -20,6 +20,7 @@ class MakeCommandsTest extends TestCase
             ['cast', 'Casts'],
             ['channel', 'Channels'],
             ['command', 'Console\Commands'],
+            ['event', 'Events'],
         ];
     }
 
