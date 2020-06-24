@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Engine;
 
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class MakeCommandsTest extends TestCase
@@ -16,15 +17,16 @@ class MakeCommandsTest extends TestCase
     public function generatorCommandsProvider(): array
     {
         return [
-            ['controller', 'Http\Controllers'],
-            ['cast', 'Casts'],
-            ['channel', 'Channels'],
-            ['command', 'Console\Commands'],
-            ['event', 'Events'],
-            ['exception', 'Exceptions'],
-            ['job', 'Jobs'],
-            ['mail', 'Mails'],
-            ['middleware', 'Http\Middleware'],
+            ['controller', '\Http\Controllers'],
+            ['cast', '\Casts'],
+            ['channel', '\Channels'],
+            ['command', '\Console\Commands'],
+            ['event', '\Events'],
+            ['exception', '\Exceptions'],
+            ['job', '\Jobs'],
+            ['mail', '\Mails'],
+            ['middleware', '\Http\Middleware'],
+            ['model', ''],
         ];
     }
 
@@ -45,7 +47,7 @@ class MakeCommandsTest extends TestCase
         );
 
         $this->assertStringContainsString(
-            "namespace PaulhenriL\FakeEngine\\{$namespace}\Hello",
+            "namespace PaulhenriL\FakeEngine{$namespace}\Hello",
             $generatedClass
         );
     }

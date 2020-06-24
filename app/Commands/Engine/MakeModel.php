@@ -3,16 +3,16 @@
 namespace PHLConsole\Commands\Engine;
 
 use PHLConsole\Commands\GeneratorCommand;
-use PHLConsole\Engine\Make\Generators\Middleware;
+use PHLConsole\Engine\Make\Generators\Model;
 
-class MakeMiddleware extends GeneratorCommand
+class MakeModel extends GeneratorCommand
 {
     /**
      * The command signature.
      */
     protected function signature(): string
     {
-        return 'make:middleware';
+        return 'make:model';
     }
 
     /**
@@ -20,7 +20,7 @@ class MakeMiddleware extends GeneratorCommand
      */
     protected function description(): string
     {
-        return 'Create a new middleware class';
+        return 'Create a new Eloquent model class';
     }
 
     /**
@@ -28,6 +28,6 @@ class MakeMiddleware extends GeneratorCommand
      */
     protected function specification(): string
     {
-        return Middleware::class;
+        return Model::class;
     }
 }
