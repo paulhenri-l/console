@@ -19,6 +19,7 @@ class MakeCommandsTest extends TestCase
             ['controller', 'Http\Controllers'],
             ['cast', 'Casts'],
             ['channel', 'Channels'],
+            ['command', 'Console\Commands'],
         ];
     }
 

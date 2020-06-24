@@ -2,6 +2,7 @@
 
 namespace PHLConsole\Engine\Make\Generators;
 
+use Illuminate\Support\Str;
 use PaulhenriL\Generator\GeneratorSpecification;
 use PaulhenriL\Generator\SortUsesProcessor;
 use PHLConsole\Engine\Engine;
@@ -27,7 +28,13 @@ abstract class EngineClassGenerator implements GeneratorSpecification
      */
     public function __construct(Engine $engine, string $name)
     {
-        $this->name = str_replace('\\', '/', $name);
+        $name = str_replace('\\', '/', $name);
+        $name = explode('/', $name);
+        $name = array_map(function ($part) {
+            return Str::studly($part);
+        }, $name);
+
+        $this->name = implode('/', $name);
         $this->engine = $engine;
     }
 
