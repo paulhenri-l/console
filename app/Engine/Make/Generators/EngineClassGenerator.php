@@ -17,14 +17,14 @@ abstract class EngineClassGenerator implements GeneratorSpecification
     protected $engine;
 
     /**
-     * The cast name.
+     * The class name.
      *
      * @var string
      */
     protected $name;
 
     /**
-     * Cast constructor.
+     * EngineClassGenerator constructor.
      */
     public function __construct(Engine $engine, string $name)
     {

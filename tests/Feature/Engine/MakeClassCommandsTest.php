@@ -5,7 +5,7 @@ namespace Tests\Feature\Engine;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class MakeCommandsTest extends TestCase
+class MakeClassCommandsTest extends TestCase
 {
     protected function setUp(): void
     {
