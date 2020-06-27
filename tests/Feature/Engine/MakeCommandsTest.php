@@ -30,6 +30,10 @@ class MakeCommandsTest extends TestCase
             ['notification', '\Notifications'],
             ['observer', '\Observers'],
             ['policy', '\Policies'],
+            ['provider', '\Providers'],
+            ['request', '\Http\Requests'],
+            ['resource', '\Http\Resources'],
+            ['rule', '\Rules'],
         ];
     }
 
