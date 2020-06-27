@@ -27,6 +27,7 @@ class MakeCommandsTest extends TestCase
             ['mail', '\Mails'],
             ['middleware', '\Http\Middleware'],
             ['model', ''],
+            ['notification', '\Notifications'],
         ];
     }
 
