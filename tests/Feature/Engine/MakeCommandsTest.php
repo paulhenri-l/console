@@ -29,6 +29,7 @@ class MakeCommandsTest extends TestCase
             ['model', ''],
             ['notification', '\Notifications'],
             ['observer', '\Observers'],
+            ['policy', '\Policies'],
         ];
     }
 

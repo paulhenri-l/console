@@ -3,16 +3,16 @@
 namespace PHLConsole\Commands\Engine;
 
 use PHLConsole\Commands\GeneratorCommand;
-use PHLConsole\Engine\Make\Generators\Observer;
+use PHLConsole\Engine\Make\Generators\Policy;
 
-class MakeObserver extends GeneratorCommand
+class MakePolicy extends GeneratorCommand
 {
     /**
      * The command signature.
      */
     protected function signature(): string
     {
-        return 'make:observer';
+        return 'make:policy';
     }
 
     /**
@@ -20,7 +20,7 @@ class MakeObserver extends GeneratorCommand
      */
     protected function description(): string
     {
-        return 'Create a new observer class';
+        return 'Create a new policy class';
     }
 
     /**
@@ -28,6 +28,6 @@ class MakeObserver extends GeneratorCommand
      */
     protected function specification(): string
     {
-        return Observer::class;
+        return Policy::class;
     }
 }
