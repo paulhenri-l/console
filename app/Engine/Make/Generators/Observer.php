@@ -2,14 +2,14 @@
 
 namespace PHLConsole\Engine\Make\Generators;
 
-class Notification extends EngineClassGenerator
+class Observer extends EngineClassGenerator
 {
     /**
      * Return the path to the class template.
      */
     protected function getTemplatePath(): string
     {
-        return __DIR__ . '/stubs/notification.stub';
+        return __DIR__ . '/stubs/observer.stub';
     }
 
     /**
@@ -17,6 +17,6 @@ class Notification extends EngineClassGenerator
      */
     function getTargetNamespace(): string
     {
-        return 'Notifications';
+        return 'Observers';
     }
 }

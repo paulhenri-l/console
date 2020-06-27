@@ -28,6 +28,7 @@ class MakeCommandsTest extends TestCase
             ['middleware', '\Http\Middleware'],
             ['model', ''],
             ['notification', '\Notifications'],
+            ['observer', '\Observers'],
         ];
     }
 
