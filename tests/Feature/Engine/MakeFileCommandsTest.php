@@ -17,6 +17,7 @@ class MakeFileCommandsTest extends TestCase
     {
         return [
             ['migration', "database/migrations/2020_01_01_000000_hello.php"],
+            ['test', "tests/Feature/Hello.php"],
         ];
     }
 
