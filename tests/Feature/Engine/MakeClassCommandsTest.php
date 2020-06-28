@@ -17,13 +17,14 @@ class MakeClassCommandsTest extends TestCase
     public function generatorCommandsProvider(): array
     {
         return [
-            ['controller', '\Http\Controllers'],
             ['cast', '\Casts'],
             ['channel', '\Channels'],
             ['command', '\Console\Commands'],
+            ['controller', '\Http\Controllers'],
             ['event', '\Events'],
             ['exception', '\Exceptions'],
             ['job', '\Jobs'],
+            ['listener', '\Listeners'],
             ['mail', '\Mails'],
             ['middleware', '\Http\Middleware'],
             ['model', ''],
